@@ -193,6 +193,43 @@
     });
   }
 
+  /* ---------- Vorher/Nachher-Regler ---------- */
+  const cmp = $('#lfCompare');
+  if (cmp) {
+    const range = $('#lfCmpRange'), layer = $('#lfCmpNew'), handle = $('#lfCmpHandle');
+    const set = v => {
+      layer.style.clipPath = `inset(0 0 0 ${v}%)`;
+      handle.style.transform = `translateX(${v}%)`;
+      range.setAttribute('aria-valuetext', `${Math.round(100 - v)} Prozent Lokalform sichtbar`);
+    };
+    range.addEventListener('input', () => set(Number(range.value)));
+    set(50);
+    // Einmaliger Hinweis, dass man ziehen kann
+    cmp.addEventListener('lf:in', () => {
+      if (reduce()) return;
+      let touched = false;
+      range.addEventListener('pointerdown', () => (touched = true), { once: true });
+      const keys = [[0, 50], [700, 30], [1500, 68], [2200, 50]], t0 = performance.now() + 500;
+      const ease = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+      const step = now => {
+        if (touched) return;
+        const t = now - t0;
+        if (t < 0) return requestAnimationFrame(step);
+        let i = keys.findIndex(k => k[0] > t);
+        if (i === -1) { range.value = 50; set(50); return; }
+        const [ta, va] = keys[i - 1], [tb, vb] = keys[i];
+        const v = va + (vb - va) * ease((t - ta) / (tb - ta));
+        range.value = v; set(v);
+        requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    });
+  }
+
+  /* ---------- Lighthouse-Anzeigen ---------- */
+  $$('.lf-gauge').forEach(g => $('.fg', g).style.setProperty('--v', Number(g.dataset.v) / 100));
+  $('#lfGauges')?.addEventListener('lf:in', e => $$('[data-count]', e.currentTarget).forEach(countUp));
+
   /* ---------- Anfrageformular → Zentrale ---------- */
   $('#leadForm')?.addEventListener('submit', async e => {
     e.preventDefault();

@@ -11,13 +11,14 @@ HERE = pathlib.Path(__file__).parent
 
 HEAD_EXTRA = (
     '<meta name="theme-color" content="#000000">\n'
+    '<meta property="og:locale" content="de_DE">\n'
     '<link rel="stylesheet" href="assets/lf.css?v=2">\n'
     '<script>document.documentElement.classList.add("js");'
     'try{if(window.self!==window.top)document.documentElement.classList.add("in-frame")}catch(e){document.documentElement.classList.add("in-frame")}</script>\n'
 )
 
 HOME_NAV = [("#top", "Übersicht"), ("#arbeiten", "Arbeiten"), ("#leistungen", "Leistungen"), ("#prozess", "Ablauf"),
-            ("#preise", "Preise"), ("#seo", "Sichtbarkeit"), ("#anfrage", "Anfrage")]
+            ("#preise", "Preise"), ("#seo", "Sichtbarkeit"), ("#region", "Region"), ("#anfrage", "Anfrage")]
 PAGES = [("webdesign-luedenscheid.html", "Lüdenscheid"), ("preise.html", "Alle Preise"), ("referenzen.html", "Referenzen"),
          ("wissen.html", "Wissen"), ("termine.html", "Termin buchen")]
 
@@ -78,11 +79,13 @@ def footer(page):
     return f'''<footer class="lf-foot">
   <div class="lf-wrap">
     <div class="lf-foot-grid">
-      <div><a class="lf-brand" href="{p or '#'}top" aria-label="Lokalform – nach oben"><i></i>LOKALFORM</a><p>Individuelles Webdesign, digitale Systeme und Local SEO für Unternehmen in Lüdenscheid, im Märkischen Kreis und darüber hinaus.</p></div>
-      <div><h4>Leistungen</h4><nav aria-label="Leistungen"><a href="webdesign-luedenscheid.html">Webdesign Lüdenscheid</a><a href="website-start.html">Website Start</a><a href="website-business.html">Website Business</a><a href="website-individuell.html">Individuell</a><a href="local-seo.html">Local SEO</a></nav></div>
-      <div><h4>Studio</h4><nav aria-label="Studio"><a href="{p}#arbeiten">Arbeiten</a><a href="preise.html">Preise</a><a href="referenzen.html">Referenzen</a><a href="wissen.html">Wissen</a>{termin}</nav></div>
-      <div><h4>Rechtlich</h4><nav aria-label="Rechtliches"><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a><a href="cookies.html">Cookies</a><a href="agb.html">AGB</a><a href="widerruf.html">Widerruf</a><a href="mailto:webdesign@lokalform.de">webdesign@lokalform.de</a></nav></div>
+      <div><a class="lf-brand" href="{p or '#'}top" aria-label="Lokalform – nach oben"><i></i>LOKALFORM</a><p>Individuelles Webdesign, digitale Systeme und Local SEO für Unternehmen in Lüdenscheid, im Märkischen Kreis und darüber hinaus.</p>
+        <address class="lf-nap"><strong>Lokalform</strong><br>Niederwehberg 1<br>58507 Lüdenscheid<br><a href="tel:+491605959013">0160 5959013</a><br><a href="mailto:webdesign@lokalform.de">webdesign@lokalform.de</a></address></div>
+      <div><p class="lf-foot-h">Leistungen</p><nav aria-label="Leistungen"><a href="webdesign-luedenscheid.html">Webdesign Lüdenscheid</a><a href="website-start.html">Website Start</a><a href="website-business.html">Website Business</a><a href="website-individuell.html">Individuell</a><a href="local-seo.html">Local SEO</a></nav></div>
+      <div><p class="lf-foot-h">Studio</p><nav aria-label="Studio"><a href="{p}#arbeiten">Arbeiten</a><a href="preise.html">Preise</a><a href="referenzen.html">Referenzen</a><a href="wissen.html">Wissen</a>{termin}</nav></div>
+      <div><p class="lf-foot-h">Rechtlich</p><nav aria-label="Rechtliches"><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a><a href="cookies.html">Cookies</a><a href="agb.html">AGB</a><a href="widerruf.html">Widerruf</a><a href="mailto:webdesign@lokalform.de">webdesign@lokalform.de</a></nav></div>
     </div>
+    <div class="lf-wordmark" data-r aria-hidden="true"><span><i></i>LOKALFORM</span></div>
     <div class="lf-foot-bottom"><span>© <span data-year></span> Lokalform</span><span>Webdesign · Systeme · Local SEO</span></div>
   </div>
 </footer>
@@ -107,9 +110,65 @@ for f in ["agb", "cookies", "datenschutz", "widerruf", "impressum"]:
     TEMPLATE[f + ".html"] = "t-legal"
 
 
+LH = {"PERF": "95", "A11Y": "98", "BP": "96", "SEO": "100"}
+if len(sys.argv) > 3:
+    import json
+    cats = json.load(open(sys.argv[3]))["categories"]
+    LH = {"PERF": cats["performance"], "A11Y": cats["accessibility"], "BP": cats["best-practices"], "SEO": cats["seo"]}
+    LH = {k: str(round(v["score"] * 100)) for k, v in LH.items()}
+
+TOWNS = ["Lüdenscheid", "Altena", "Balve", "Halver", "Hemer", "Herscheid", "Iserlohn", "Kierspe", "Meinerzhagen", "Menden (Sauerland)",
+         "Nachrodt-Wiblingwerde", "Neuenrade", "Plettenberg", "Schalksmühle", "Werdohl"]
+
+
+def jsonld_index():
+    import json
+    org = "https://lokalform.de/#organization"
+    biz = {
+        "@type": "ProfessionalService", "@id": "https://lokalform.de/#service", "name": "Lokalform",
+        "alternateName": "Lokalform Webdesign", "url": "https://lokalform.de/",
+        "description": "Individuelles Webdesign, digitale Systeme und Local SEO für Unternehmen in Lüdenscheid und im Märkischen Kreis.",
+        "image": "https://lokalform.de/assets/og-image.png", "logo": "https://lokalform.de/assets/icon-512.png",
+        "email": "webdesign@lokalform.de", "telephone": "+49 160 5959013", "priceRange": "ab 400 €",
+        "address": {"@type": "PostalAddress", "streetAddress": "Niederwehberg 1", "postalCode": "58507",
+                    "addressLocality": "Lüdenscheid", "addressRegion": "Nordrhein-Westfalen", "addressCountry": "DE"},
+        "areaServed": [{"@type": "City", "name": t} for t in TOWNS] + [{"@type": "AdministrativeArea", "name": "Märkischer Kreis"}],
+        "provider": {"@id": org}, "founder": {"@type": "Person", "name": "Nevio Turturro"},
+        "knowsAbout": ["Webdesign", "Local SEO", "Responsive Webdesign", "Terminbuchung", "Suchmaschinenoptimierung"],
+        "hasOfferCatalog": {"@type": "OfferCatalog", "name": "Leistungen", "itemListElement": [
+            {"@type": "Offer", "name": n, "url": "https://lokalform.de/" + u,
+             "priceSpecification": {"@type": "PriceSpecification", "minPrice": pr, "priceCurrency": "EUR", **({"unitText": "Monat"} if m else {})}}
+            for n, u, pr, m in [("Website Start", "website-start.html", 400, False), ("Website Business", "website-business.html", 600, False),
+                                ("Care Betreuung", "care-20.html", 20, True), ("Growth Betreuung", "growth-40.html", 40, True)]]},
+    }
+    faq = [("Ist jede Website individuell?", "Ja. Struktur, Typografie, Bildsprache, Seitenrhythmus und Funktionen werden passend zum Unternehmen entwickelt. Die drei Demo-Websites zeigen bewusst völlig verschiedene Ansätze."),
+           ("Kann ich später Funktionen ergänzen?", "Ja. Terminbuchung, Landingpages, Formulare, Kundenbereiche, Adminfunktionen und weitere Inhalte können ergänzt werden."),
+           ("Wie funktionieren Care und Growth?", "Care für 20 €/Monat deckt die grundlegende laufende Betreuung ab. Growth für 40 €/Monat ergänzt priorisierte Änderungen sowie Local-SEO- und Content-Hinweise."),
+           ("Kann ich Rechnungen und Anfragen verwalten?", "Die Lokalform-Zentrale enthält Anfragen, Termine, Kunden, Rechnungen, Ausgaben und eine Steuerübersicht. Für den echten Mehrgerätebetrieb wird sie beim Livegang an ein geschütztes Backend angebunden.")]
+    graph = [
+        {"@type": "Organization", "@id": org, "name": "Lokalform", "url": "https://lokalform.de/",
+         "logo": {"@type": "ImageObject", "url": "https://lokalform.de/assets/icon-512.png", "width": 512, "height": 512},
+         "email": "webdesign@lokalform.de", "telephone": "+49 160 5959013",
+         "address": biz["address"]},
+        {"@type": "WebSite", "@id": "https://lokalform.de/#website", "url": "https://lokalform.de/", "name": "Lokalform",
+         "alternateName": "Lokalform Webdesign", "publisher": {"@id": org}, "inLanguage": "de-DE"},
+        biz,
+        {"@type": "WebPage", "@id": "https://lokalform.de/#webpage", "url": "https://lokalform.de/",
+         "name": "Lokalform – Webdesign in Lüdenscheid für Unternehmen", "isPartOf": {"@id": "https://lokalform.de/#website"},
+         "about": {"@id": "https://lokalform.de/#service"}, "inLanguage": "de-DE",
+         "primaryImageOfPage": {"@type": "ImageObject", "url": "https://lokalform.de/assets/og-image.png"}},
+        {"@type": "FAQPage", "@id": "https://lokalform.de/#faq", "mainEntity": [
+            {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]},
+    ]
+    return '<script type="application/ld+json">' + json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False, separators=(",", ":")) + "</script>"
+
+
 def build_index():
     src = (SRC / "index.html").read_text()
+    src = re.sub(r'<script type="application/ld\+json">.*?</script>', lambda m: jsonld_index(), src, count=1, flags=re.S)
     body = (HERE / "index_body.html").read_text()
+    for k, v in LH.items():
+        body = body.replace("{" + k + "}", v)
     body = body.replace("{{SHELL}}", shell("index.html")).replace("{{FOOT}}", footer("index.html"))
     return head_of(src) + body
 
@@ -139,7 +198,11 @@ def main():
     (OUT / "index.html").write_text(build_index())
     for name, tpl in TEMPLATE.items():
         (OUT / name).write_text(build_sub(name, tpl))
-    print("ok", 1 + len(TEMPLATE), "Seiten")
+    import datetime
+    today = datetime.date.today().isoformat()
+    sm = (HERE / "sitemap.xml").read_text()
+    (OUT / "sitemap.xml").write_text(re.sub(r"<lastmod>[^<]*</lastmod>", f"<lastmod>{today}</lastmod>", sm))
+    print("ok", 1 + len(TEMPLATE), "Seiten + sitemap.xml", LH)
 
 
 main()
