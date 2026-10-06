@@ -555,6 +555,30 @@
   addEventListener('hashchange', () => { closeDrawer(); route(); window.scrollTo(0, 0); });
   addEventListener('resize', () => { const link = $(`#zNav a[data-view="${current}"]`), pill = $('.z-pill'); if (link && pill) pill.style.transform = `translateY(${link.offsetTop}px)`; });
 
+  /* ======================= Tag / Nacht ======================= */
+  const darkMq = matchMedia('(prefers-color-scheme: dark)');
+  const theme = () => document.documentElement.dataset.theme || (darkMq.matches ? 'dark' : 'light');
+  const syncTheme = () => $$('[data-theme-toggle]').forEach(b => b.setAttribute('aria-checked', String(theme() === 'dark')));
+  const setTheme = t => {
+    const root = document.documentElement;
+    root.classList.add('z-theming'); root.dataset.theme = t;
+    try { localStorage.setItem('lf-theme', t); } catch { /* nur für diese Sitzung */ }
+    syncTheme();
+    requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove('z-theming')));
+  };
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('[data-theme-toggle]'); if (!btn) return;
+    const next = theme() === 'dark' ? 'light' : 'dark';
+    if (!document.startViewTransition || reduce()) { setTheme(next); return; }
+    const r = btn.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
+    const rad = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+    document.startViewTransition(() => setTheme(next)).ready.then(() => document.documentElement.animate(
+      { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${rad}px at ${x}px ${y}px)`] },
+      { duration: 650, easing: 'cubic-bezier(.77,0,.175,1)', pseudoElement: '::view-transition-new(root)' })).catch(() => {});
+  });
+  darkMq.addEventListener?.('change', syncTheme);
+  syncTheme();
+
   /* ======================= Start ======================= */
   async function boot() {
     try {

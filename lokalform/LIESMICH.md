@@ -1,7 +1,7 @@
 # Lokalform – Redesign „Zentrale“
 
 Neue Gestaltung von lokalform.de in edlem Schwarz-Weiß: weiße Flächen, tiefes Schwarz, Haarlinien,
-Bodoni Moda für Überschriften – mit Animationen und voller Handy-Bedienung.
+Bodoni Moda für Überschriften – mit Tag-/Nachtansicht, Animationen und voller Handy-Bedienung.
 
 ## Hochladen (Strato)
 
@@ -24,6 +24,7 @@ Formular (`/api.php?action=lead`) und Terminbuchung (`/api.php?action=appointmen
 weiterhin dieselben Schnittstellen wie vorher.
 
 ## Hinweise
+- Tag-/Nachtansicht: folgt automatisch der Einstellung des Geräts; der Schalter „Nachtansicht“ (Seitenleiste, Handy-Menü, Footer, Zentrale) überschreibt das und merkt sich die Wahl im Browser.
 - Keine externen Schriften oder Bibliotheken: nur Systemschriften, kein Google Fonts (DSGVO).
 - Mit „Bewegung reduzieren“ im Betriebssystem werden die Bewegungen auf ruhige Überblendungen reduziert.
 - Die Zentrale-Vorschau auf der Startseite zeigt ausdrücklich fiktive Beispieldaten.

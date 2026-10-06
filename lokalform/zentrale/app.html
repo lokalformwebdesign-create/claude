@@ -7,7 +7,8 @@
 <meta name="theme-color" content="#000000">
 <title>Zentrale · Lokalform</title>
 <link rel="icon" href="../assets/favicon.svg">
-<link rel="stylesheet" href="zentrale.css?v=2">
+<script src="theme.js?v=1"></script>
+<link rel="stylesheet" href="zentrale.css?v=3">
 </head>
 <body class="z-app">
 <a class="z-skip" href="#zMain">Zum Inhalt</a>
@@ -23,7 +24,7 @@
     <a href="#ausgaben" data-view="ausgaben">Ausgaben</a>
     <a href="#steuer" data-view="steuer">Steuer</a>
   </nav>
-  <div class="z-side-foot"><a href="../" target="_blank" rel="noopener">Website öffnen ↗</a><button type="button" data-act="logout">Abmelden</button></div>
+  <div class="z-side-foot"><button type="button" class="z-theme" data-theme-toggle role="switch" aria-checked="false">Nachtansicht<i aria-hidden="true"></i></button><a href="../" target="_blank" rel="noopener">Website öffnen ↗</a><button type="button" data-act="logout">Abmelden</button></div>
 </aside>
 
 <header class="z-top"><svg class="z-seal" viewBox="82 82 916 916" aria-hidden="true"><circle cx="540" cy="540" r="452" fill="none" stroke="currentColor" stroke-width="1.6" vector-effect="non-scaling-stroke"/><g fill="currentColor"><path d="M387 390H439V558H540V605H387Z"/><path d="M545 390H697V433H603V461H690V515H603V605H545Z"/></g></svg><strong id="zTopTitle">Übersicht</strong><button type="button" class="z-icon-btn" data-act="add" aria-label="Neu anlegen" id="zTopAdd">+</button></header>
@@ -43,6 +44,7 @@
 </nav>
 <div class="z-more" id="zMore" hidden>
   <div class="z-more-card" role="dialog" aria-modal="true" aria-label="Weitere Bereiche">
+    <button type="button" class="z-theme" data-theme-toggle role="switch" aria-checked="false">Nachtansicht<i aria-hidden="true"></i></button>
     <a href="#kunden" data-view="kunden">Kunden</a><a href="#ausgaben" data-view="ausgaben">Ausgaben</a><a href="#steuer" data-view="steuer">Steuer</a>
     <a href="../" target="_blank" rel="noopener">Website öffnen ↗</a><button type="button" data-act="logout">Abmelden</button>
   </div>
@@ -58,6 +60,6 @@
 <div class="z-confirm" id="zConfirm" hidden><div role="alertdialog" aria-modal="true" aria-labelledby="zConfirmText"><p id="zConfirmText">Wirklich löschen?</p><div><button type="button" class="z-btn ghost" data-confirm="no">Abbrechen</button><button type="button" class="z-btn danger" data-confirm="yes">Löschen</button></div></div></div>
 <div class="z-toast" id="zToast" role="status" aria-live="polite"></div>
 <div id="zPrint" class="z-print" aria-hidden="true"></div>
-<script src="app.js?v=1" defer></script>
+<script src="app.js?v=2" defer></script>
 </body>
 </html>

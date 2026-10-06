@@ -3,7 +3,7 @@
 <link rel="preload" href="assets/fonts/bodoni-moda.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/hanken-grotesk.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/lf.css?v=3">
-<script>document.documentElement.classList.add("js");try{if(window.self!==window.top)document.documentElement.classList.add("in-frame")}catch(e){document.documentElement.classList.add("in-frame")}</script>
+<script>document.documentElement.classList.add("js");try{var t=localStorage.getItem("lf-theme");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}try{if(window.self!==window.top)document.documentElement.classList.add("in-frame")}catch(e){document.documentElement.classList.add("in-frame")}</script>
 </head>
 <body class="t-product">
 <a class="lf-skip" href="#main">Zum Inhalt</a>
@@ -13,6 +13,7 @@
   <div class="lf-group"><span>Studio</span><nav class="lf-nav"><i class="lf-pill" aria-hidden="true"></i><a href="index.html#top">Übersicht</a><a href="index.html#arbeiten">Arbeiten</a><a href="index.html#labor">Ausprobieren</a><a href="index.html#leistungen">Leistungen</a><a href="index.html#prozess">Ablauf</a><a href="index.html#preise">Preise</a><a href="index.html#seo">Sichtbarkeit</a><a href="index.html#region">Region</a><a href="index.html#anfrage">Anfrage</a></nav></div>
   <div class="lf-group"><span>Seiten</span><nav class="lf-nav" data-spy><i class="lf-pill" aria-hidden="true"></i><a href="webdesign-luedenscheid.html">Lüdenscheid</a><a href="preise.html" class="is-active" aria-current="page">Alle Preise</a><a href="referenzen.html">Referenzen</a><a href="wissen.html">Wissen</a><a href="termine.html">Termin buchen</a></nav></div>
   <div class="lf-side-foot">
+    <button type="button" class="lf-theme" data-theme-toggle role="switch" aria-checked="false"><span class="lf-theme-l"><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg><svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>Nachtansicht</span><i aria-hidden="true"></i></button>
     <div class="lf-status"><b aria-hidden="true"></b>Neue Projekte möglich</div>
     <a class="lf-btn light" href="termine.html">Termin buchen <span class="ar" aria-hidden="true">↗</span></a>
     <p><a href="mailto:webdesign@lokalform.de">webdesign@lokalform.de</a></p>
@@ -23,6 +24,7 @@
   <div class="lf-top-actions"><a class="lf-btn light" href="termine.html">Termin<span class="lf-hide-xs">&nbsp;buchen</span></a><button type="button" class="lf-burger" aria-expanded="false" aria-controls="lfSheet" aria-label="Menü öffnen"><span></span></button></div>
 </header>
 <div class="lf-sheet" id="lfSheet">
+  <button type="button" class="lf-theme" data-theme-toggle role="switch" aria-checked="false"><span class="lf-theme-l"><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg><svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>Nachtansicht</span><i aria-hidden="true"></i></button>
   <div class="lf-group"><span>Studio</span><nav class="lf-nav" aria-label="Studio"><a href="index.html#top">Übersicht</a><a href="index.html#arbeiten">Arbeiten</a><a href="index.html#labor">Ausprobieren</a><a href="index.html#leistungen">Leistungen</a><a href="index.html#prozess">Ablauf</a><a href="index.html#preise">Preise</a><a href="index.html#seo">Sichtbarkeit</a><a href="index.html#region">Region</a><a href="index.html#anfrage">Anfrage</a></nav></div>
   <div class="lf-group"><span>Seiten</span><nav class="lf-nav" aria-label="Seiten"><a href="webdesign-luedenscheid.html">Lüdenscheid</a><a href="preise.html" class="is-active" aria-current="page">Alle Preise</a><a href="referenzen.html">Referenzen</a><a href="wissen.html">Wissen</a><a href="termine.html">Termin buchen</a></nav></div>
   <a class="lf-btn light" href="termine.html">Termin buchen <span class="ar" aria-hidden="true">↗</span></a>
@@ -38,7 +40,7 @@
       <div><p class="lf-foot-h">Rechtlich</p><nav aria-label="Rechtliches"><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a><a href="cookies.html">Cookies</a><a href="agb.html">AGB</a><a href="widerruf.html">Widerruf</a><a href="mailto:webdesign@lokalform.de">webdesign@lokalform.de</a></nav></div>
     </div>
     <div class="lf-wordmark" data-r aria-hidden="true"><span><i></i>LOKALFORM</span></div>
-    <div class="lf-foot-bottom"><span>© <span data-year></span> Lokalform</span><span>Webdesign · Systeme · Local SEO</span></div>
+    <div class="lf-foot-bottom"><span>© <span data-year></span> Lokalform</span><button type="button" class="lf-theme" data-theme-toggle role="switch" aria-checked="false"><span class="lf-theme-l"><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg><svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>Nachtansicht</span><i aria-hidden="true"></i></button><span>Webdesign · Systeme · Local SEO</span></div>
   </div>
 </footer>
 <script>

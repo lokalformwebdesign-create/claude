@@ -37,7 +37,7 @@
   };
   if (sheet) sheet.setAttribute('inert', '');
   burger?.addEventListener('click', () => setSheet(burger.getAttribute('aria-expanded') !== 'true'));
-  sheet?.addEventListener('click', e => { if (e.target.closest('a,button')) setSheet(false); });
+  sheet?.addEventListener('click', e => { if (e.target.closest('a,button:not([data-theme-toggle])')) setSheet(false); });
   addEventListener('keydown', e => { if (e.key === 'Escape' && sheet?.classList.contains('open')) { setSheet(false); burger.focus(); } });
   matchMedia('(min-width:1100px)').addEventListener?.('change', e => { if (e.matches) setSheet(false); });
 
@@ -137,6 +137,33 @@
 
   /* ---------- Jahr ---------- */
   $$('[data-year],#year').forEach(el => (el.textContent = new Date().getFullYear()));
+
+  /* ---------- Tag / Nacht ---------- */
+  const KEY = 'lf-theme', dark = matchMedia('(prefers-color-scheme: dark)');
+  const effective = () => root.dataset.theme || (dark.matches ? 'dark' : 'light');
+  const syncTheme = () => $$('[data-theme-toggle]').forEach(b => b.setAttribute('aria-checked', String(effective() === 'dark')));
+  const applyTheme = t => {
+    root.classList.add('lf-theming');
+    root.dataset.theme = t;
+    try { localStorage.setItem(KEY, t); } catch { /* ohne Speicher nur für diese Seite */ }
+    syncTheme();
+    requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove('lf-theming')));
+  };
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('[data-theme-toggle]');
+    if (!btn) return;
+    const next = effective() === 'dark' ? 'light' : 'dark';
+    if (!document.startViewTransition || reduce.matches) { applyTheme(next); return; }
+    const r = btn.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
+    const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+    const vt = document.startViewTransition(() => applyTheme(next));
+    vt.ready.then(() => root.animate(
+      { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+      { duration: 650, easing: 'cubic-bezier(.77,0,.175,1)', pseudoElement: '::view-transition-new(root)' }
+    )).catch(() => {});
+  });
+  dark.addEventListener?.('change', syncTheme);
+  syncTheme();
 
   /* ---------- Anfragen & Buchungen zusätzlich an die Lokalform-Zentrale ---------- */
   // Das bisherige System (/api.php) bleibt führend; die Zentrale erhält eine Kopie.

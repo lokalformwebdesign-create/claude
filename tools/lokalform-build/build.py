@@ -16,6 +16,7 @@ HEAD_EXTRA = (
     '<link rel="preload" href="assets/fonts/hanken-grotesk.woff2" as="font" type="font/woff2" crossorigin>\n'
     '<link rel="stylesheet" href="assets/lf.css?v=3">\n'
     '<script>document.documentElement.classList.add("js");'
+    'try{var t=localStorage.getItem("lf-theme");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}'
     'try{if(window.self!==window.top)document.documentElement.classList.add("in-frame")}catch(e){document.documentElement.classList.add("in-frame")}</script>\n'
 )
 
@@ -33,6 +34,12 @@ def seal(cls="", label="Lokalform Logo"):
             '<line class="s-line" x1="348" y1="699" x2="732" y2="699" stroke="currentColor" stroke-width="1.6" vector-effect="non-scaling-stroke"/>'
             '<text class="s-word" x="360" y="766" textLength="362" lengthAdjust="spacing" font-family="Arial,Helvetica,sans-serif" font-size="40" fill="currentColor">LOKALFORM</text>'
             '</svg>')
+
+
+THEME_BTN = ('<button type="button" class="lf-theme" data-theme-toggle role="switch" aria-checked="false">'
+             '<span class="lf-theme-l"><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg>'
+             '<svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>'
+             'Nachtansicht</span><i aria-hidden="true"></i></button>')
 
 
 def nav_links(items, current, prefix=""):
@@ -65,6 +72,7 @@ def shell(page):
   <div class="lf-group"><span>Studio</span><nav class="lf-nav"{studio_attr}><i class="lf-pill" aria-hidden="true"></i>{studio}</nav></div>
   <div class="lf-group"><span>Seiten</span><nav class="lf-nav"{pages_attr}><i class="lf-pill" aria-hidden="true"></i>{pages}</nav></div>
   <div class="lf-side-foot">
+    {THEME_BTN}
     <div class="lf-status"><b aria-hidden="true"></b>Neue Projekte möglich</div>
     {cta}
     <p><a href="mailto:webdesign@lokalform.de">webdesign@lokalform.de</a></p>
@@ -75,6 +83,7 @@ def shell(page):
   <div class="lf-top-actions">{top_cta}<button type="button" class="lf-burger" aria-expanded="false" aria-controls="lfSheet" aria-label="Menü öffnen"><span></span></button></div>
 </header>
 <div class="lf-sheet" id="lfSheet">
+  {THEME_BTN}
   <div class="lf-group"><span>Studio</span><nav class="lf-nav" aria-label="Studio">{studio}</nav></div>
   <div class="lf-group"><span>Seiten</span><nav class="lf-nav" aria-label="Seiten">{pages}</nav></div>
   {cta}
@@ -98,7 +107,7 @@ def footer(page):
       <div><p class="lf-foot-h">Rechtlich</p><nav aria-label="Rechtliches"><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a><a href="cookies.html">Cookies</a><a href="agb.html">AGB</a><a href="widerruf.html">Widerruf</a><a href="mailto:webdesign@lokalform.de">webdesign@lokalform.de</a></nav></div>
     </div>
     <div class="lf-wordmark" data-r aria-hidden="true"><span><i></i>LOKALFORM</span></div>
-    <div class="lf-foot-bottom"><span>© <span data-year></span> Lokalform</span><span>Webdesign · Systeme · Local SEO</span></div>
+    <div class="lf-foot-bottom"><span>© <span data-year></span> Lokalform</span>{THEME_BTN}<span>Webdesign · Systeme · Local SEO</span></div>
   </div>
 </footer>
 '''
