@@ -17,10 +17,20 @@ HEAD_EXTRA = (
     'try{if(window.self!==window.top)document.documentElement.classList.add("in-frame")}catch(e){document.documentElement.classList.add("in-frame")}</script>\n'
 )
 
-HOME_NAV = [("#top", "Übersicht"), ("#arbeiten", "Arbeiten"), ("#leistungen", "Leistungen"), ("#prozess", "Ablauf"),
+HOME_NAV = [("#top", "Übersicht"), ("#arbeiten", "Arbeiten"), ("#labor", "Ausprobieren"), ("#leistungen", "Leistungen"), ("#prozess", "Ablauf"),
             ("#preise", "Preise"), ("#seo", "Sichtbarkeit"), ("#region", "Region"), ("#anfrage", "Anfrage")]
 PAGES = [("webdesign-luedenscheid.html", "Lüdenscheid"), ("preise.html", "Alle Preise"), ("referenzen.html", "Referenzen"),
          ("wissen.html", "Wissen"), ("termine.html", "Termin buchen")]
+
+
+def seal(cls="", label="Lokalform Logo"):
+    """LF-Monogramm (Kreis, LF, Linie, LOKALFORM) – Farbe über currentColor."""
+    return (f'<svg class="lf-seal {cls}" viewBox="82 82 916 916" role="img" aria-label="{label}">'
+            '<circle class="s-ring" cx="540" cy="540" r="452" pathLength="1" fill="none" stroke="currentColor" stroke-width="1.6" vector-effect="non-scaling-stroke"/>'
+            '<g class="s-lf" fill="currentColor"><path d="M387 390H439V558H540V605H387Z"/><path d="M545 390H697V433H603V461H690V515H603V605H545Z"/></g>'
+            '<line class="s-line" x1="348" y1="699" x2="732" y2="699" stroke="currentColor" stroke-width="1.6" vector-effect="non-scaling-stroke"/>'
+            '<text class="s-word" x="360" y="766" textLength="362" lengthAdjust="spacing" font-family="Arial,Helvetica,sans-serif" font-size="40" fill="currentColor">LOKALFORM</text>'
+            '</svg>')
 
 
 def nav_links(items, current, prefix=""):
@@ -79,7 +89,7 @@ def footer(page):
     return f'''<footer class="lf-foot">
   <div class="lf-wrap">
     <div class="lf-foot-grid">
-      <div><a class="lf-brand" href="{p or '#'}top" aria-label="Lokalform – nach oben"><i></i>LOKALFORM</a><p>Individuelles Webdesign, digitale Systeme und Local SEO für Unternehmen in Lüdenscheid, im Märkischen Kreis und darüber hinaus.</p>
+      <div><a class="lf-foot-seal" href="{p or '#'}top" aria-label="Lokalform – nach oben">{seal("", "Lokalform")}</a><p>Individuelles Webdesign, digitale Systeme und Local SEO für Unternehmen in Lüdenscheid, im Märkischen Kreis und darüber hinaus.</p>
         <address class="lf-nap"><strong>Lokalform</strong><br>Niederwehberg 1<br>58507 Lüdenscheid<br><a href="tel:+491605959013">0160 5959013</a><br><a href="mailto:webdesign@lokalform.de">webdesign@lokalform.de</a></address></div>
       <div><p class="lf-foot-h">Leistungen</p><nav aria-label="Leistungen"><a href="webdesign-luedenscheid.html">Webdesign Lüdenscheid</a><a href="website-start.html">Website Start</a><a href="website-business.html">Website Business</a><a href="website-individuell.html">Individuell</a><a href="local-seo.html">Local SEO</a></nav></div>
       <div><p class="lf-foot-h">Studio</p><nav aria-label="Studio"><a href="{p}#arbeiten">Arbeiten</a><a href="preise.html">Preise</a><a href="referenzen.html">Referenzen</a><a href="wissen.html">Wissen</a>{termin}</nav></div>
@@ -169,7 +179,7 @@ def build_index():
     body = (HERE / "index_body.html").read_text()
     for k, v in LH.items():
         body = body.replace("{" + k + "}", v)
-    body = body.replace("{{SHELL}}", shell("index.html")).replace("{{FOOT}}", footer("index.html"))
+    body = body.replace("{{SHELL}}", shell("index.html")).replace("{{FOOT}}", footer("index.html")).replace("{{SEAL}}", seal("lf-stamp-seal"))
     return head_of(src) + body
 
 
@@ -183,6 +193,10 @@ def build_sub(name, tpl):
     body = re.sub(r'<div class="progress"></div>', "", body, count=1)
     body = re.sub(r"<header\b.*?</header>", "", body, count=1, flags=re.S)
     body = re.sub(r"<footer\b.*?</footer>", "{{FOOT}}", body, count=1, flags=re.S)
+    # Überarbeitete Rechtstexte ersetzen den alten Inhalt
+    legal = HERE / "legal" / name
+    if legal.exists():
+        body = re.sub(r"<main\b.*?</main>", lambda m: legal.read_text().strip(), body, count=1, flags=re.S)
     # Breadcrumbs der Ratgeber-Seiten in die Shell-Optik
     body = body.replace('<div class="wrap crumbs">', '<div class="wrap lf-crumbs">')
     # main braucht id für Skip-Link
@@ -201,6 +215,10 @@ def main():
     import datetime
     today = datetime.date.today().isoformat()
     sm = (HERE / "sitemap.xml").read_text()
+    rob = (HERE / "robots.txt").read_text()
+    if "/zentrale/" not in rob:
+        rob = rob.replace("Disallow: /alt/", "Disallow: /alt/\nDisallow: /zentrale/")
+    (OUT / "robots.txt").write_text(rob)
     (OUT / "sitemap.xml").write_text(re.sub(r"<lastmod>[^<]*</lastmod>", f"<lastmod>{today}</lastmod>", sm))
     print("ok", 1 + len(TEMPLATE), "Seiten + sitemap.xml", LH)
 

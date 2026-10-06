@@ -138,5 +138,23 @@
   /* ---------- Jahr ---------- */
   $$('[data-year],#year').forEach(el => (el.textContent = new Date().getFullYear()));
 
+  /* ---------- Anfragen & Buchungen zusätzlich an die Lokalform-Zentrale ---------- */
+  // Das bisherige System (/api.php) bleibt führend; die Zentrale erhält eine Kopie.
+  if (window.fetch && !window.lfMirror) {
+    window.lfMirror = true;
+    const original = window.fetch.bind(window);
+    window.fetch = (input, init) => {
+      const result = original(input, init);
+      try {
+        const url = typeof input === 'string' ? input : (input && input.url) || '';
+        const m = /\/api\.php\?action=(lead|appointment)\b/.exec(url);
+        if (m && init && String(init.method).toUpperCase() === 'POST' && typeof init.body === 'string' && !/\/zentrale\//.test(url)) {
+          original('/zentrale/api.php?action=' + m[1], { method: 'POST', credentials: 'same-origin', keepalive: true, headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: init.body }).catch(() => {});
+        }
+      } catch { /* Kopie ist optional */ }
+      return result;
+    };
+  }
+
   window.lfReduce = reduce;
 })();

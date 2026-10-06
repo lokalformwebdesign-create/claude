@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /partner.html
+Disallow: /admin
+Disallow: /admin.php
+Disallow: /partner
+Disallow: /partner.php
+Disallow: /login.php
+Disallow: /setup.php
+Disallow: /private-data/
+Disallow: /alt/
+Disallow: /zentrale/
+
+Sitemap: https://lokalform.de/sitemap.xml

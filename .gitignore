@@ -1,2 +1,7 @@
 __pycache__/
 *.pyc
+
+# Lokalform-Zentrale: echte Daten nie ins Repo
+lokalform/zentrale/data/*.php
+lokalform/zentrale/data/*.tmp
+lokalform/zentrale/data/.lock

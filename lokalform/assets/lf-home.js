@@ -147,11 +147,20 @@
     box.classList.add('out');
     setTimeout(() => { apply(); box.classList.remove('out'); }, 160);
   };
+  // Indikator folgt der aktiven Option – nebeneinander (Desktop) oder untereinander (Handy)
+  const placeInd = group => {
+    const b = $('button.active', group), ind = $('.lf-seg-ind', group);
+    if (!b || !ind) return;
+    ind.style.width = b.offsetWidth + 'px'; ind.style.height = b.offsetHeight + 'px';
+    ind.style.transform = `translate(${b.offsetLeft}px,${b.offsetTop}px)`;
+  };
+  addEventListener('resize', () => $$('[data-choice]').forEach(g => { const i = $('.lf-seg-ind', g); i.style.transition = 'none'; placeInd(g); requestAnimationFrame(() => (i.style.transition = '')); }));
   $$('[data-choice]').forEach(group => {
     const btns = $$('button', group), ind = $('.lf-seg-ind', group);
+    ind.style.transition = 'none'; placeInd(group); requestAnimationFrame(() => requestAnimationFrame(() => (ind.style.transition = '')));
     btns.forEach((btn, k) => btn.addEventListener('click', () => {
       btns.forEach(x => { x.classList.toggle('active', x === btn); x.setAttribute('aria-checked', String(x === btn)); });
-      ind.style.transform = `translateX(${k * 100}%)`;
+      placeInd(group);
       state[group.dataset.choice] = btn.dataset.value;
       render(true);
     }));
@@ -229,6 +238,151 @@
   /* ---------- Lighthouse-Anzeigen ---------- */
   $$('.lf-gauge').forEach(g => $('.fg', g).style.setProperty('--v', Number(g.dataset.v) / 100));
   $('#lfGauges')?.addEventListener('lf:in', e => $$('[data-count]', e.currentTarget).forEach(countUp));
+
+  /* ---------- Anfrage vorbefüllen (gemeinsam) ---------- */
+  const prefillLead = (company, service, message) => {
+    const form = $('#leadForm'); if (!form) return;
+    if (company) form.querySelector('[name=company]').value = company;
+    if (service) form.querySelector('[name=service]').value = service;
+    form.querySelector('[name=message]').value = message;
+    form.scrollIntoView({ behavior: reduce() ? 'auto' : 'smooth', block: 'start' });
+    setTimeout(() => form.querySelector(company ? '[name=name]' : '[name=company]').focus({ preventScroll: true }), reduce() ? 0 : 650);
+  };
+
+  /* ---------- Ausprobieren: Tabs ---------- */
+  const tabs = $$('.lf-tabs [role=tab]'), tabInd = $('.lf-tabs-ind');
+  const selectTab = (t, focus) => {
+    tabs.forEach((x, i) => {
+      const on = x === t;
+      x.classList.toggle('active', on); x.setAttribute('aria-selected', String(on)); x.tabIndex = on ? 0 : -1;
+      $('#' + x.getAttribute('aria-controls')).hidden = !on;
+      if (on && tabInd) tabInd.style.transform = `translateX(${i * 100}%)`;
+    });
+    if (focus) t.focus();
+  };
+  tabs.forEach(t => t.addEventListener('click', () => selectTab(t)));
+  $('.lf-tabs')?.addEventListener('keydown', e => {
+    const i = tabs.findIndex(t => t.classList.contains('active'));
+    const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+    if (d) { e.preventDefault(); selectTab(tabs[(i + d + tabs.length) % tabs.length], true); }
+  });
+
+  /* ---------- Chips (Einfachauswahl) ---------- */
+  const chipValue = {};
+  $$('[data-chip]').forEach(g => {
+    const btns = $$('button', g);
+    chipValue[g.dataset.chip] = (btns.find(b => b.classList.contains('active')) || btns[0]).dataset.value;
+    btns.forEach(b => b.addEventListener('click', () => {
+      btns.forEach(x => { x.classList.toggle('active', x === b); x.setAttribute('aria-checked', String(x === b)); });
+      chipValue[g.dataset.chip] = b.dataset.value;
+      g.dispatchEvent(new CustomEvent('lf:chip', { detail: b.dataset.value }));
+    }));
+    g.addEventListener('keydown', e => {
+      const i = btns.findIndex(b => b.classList.contains('active'));
+      const d = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0;
+      if (!d) return; e.preventDefault();
+      const n = btns[(i + d + btns.length) % btns.length]; n.click(); n.focus();
+    });
+  });
+  $$('#studioForm,#serpForm').forEach(f => f.addEventListener('submit', e => e.preventDefault()));
+
+  /* ---------- Live-Studio ---------- */
+  const BR = {
+    handwerk: { l: 'Handwerk', h: o => `Handwerk aus ${o}, das hält.`, s: 'Reparatur, Umbau und Wartung – mit festen Ansprechpartnern.', c: 'Angebot anfragen', v: ['Reparatur', 'Umbau', 'Notdienst'], i: ['Mo–Fr 7–17 Uhr', 'Einsatz im Märkischen Kreis'] },
+    cafe: { l: 'Café', h: o => `Frisch geröstet in ${o}.`, s: 'Frühstück, hausgemachter Kuchen und richtig guter Kaffee.', c: 'Tisch reservieren', v: ['Frühstück', 'Kuchen', 'Catering'], i: ['Di–So 8–18 Uhr', 'Plätze drinnen und draußen'] },
+    salon: { l: 'Salon', h: o => `Dein Termin in ${o}.`, s: 'Schnitt, Farbe und Pflege – rund um die Uhr online buchbar.', c: 'Termin buchen', v: ['Schnitt', 'Farbe', 'Pflege'], i: ['Di–Sa 9–19 Uhr', 'Online-Buchung jederzeit'] },
+    praxis: { l: 'Praxis', h: o => `Gut versorgt in ${o}.`, s: 'Termine online, kurze Wege und klare Informationen.', c: 'Termin vereinbaren', v: ['Sprechzeiten', 'Leistungen', 'Team'], i: ['Mo–Fr 8–12 Uhr', 'Rezepte online bestellen'] }
+  };
+  const site = $('#phSite');
+  if (site) {
+    const nameIn = $('#stName'), townIn = $('#stTown');
+    const initials = n => (n.trim().split(/\s+/).slice(0, 2).map(w => w[0] || '').join('') || 'LF').toUpperCase();
+    const paint = () => {
+      const b = BR[chipValue.branch], name = nameIn.value.trim() || 'Dein Betrieb', o = townIn.value;
+      site.dataset.branch = chipValue.branch; site.dataset.style = chipValue.style;
+      $('#phName').textContent = name; $('#phLogo').textContent = initials(name);
+      $('#phKicker').textContent = `${b.l} · ${o}`; $('#phHead').textContent = b.h(o); $('#phSub').textContent = b.s;
+      $('#phCta').textContent = b.c; $('#phBar').textContent = b.c;
+      $$('#phCards b').forEach((el, i) => (el.textContent = b.v[i]));
+      $('#phInfo1').textContent = b.i[0]; $('#phInfo2').textContent = b.i[1];
+    };
+    const swap = () => {
+      if (reduce()) { paint(); return; }
+      site.classList.add('swap');
+      setTimeout(() => { paint(); site.classList.remove('swap'); }, 170);
+    };
+    nameIn.addEventListener('input', paint);
+    townIn.addEventListener('change', swap);
+    $$('#studioForm [data-chip]').forEach(g => g.addEventListener('lf:chip', swap));
+    paint();
+    $('#studioUse').addEventListener('click', () => {
+      const b = BR[chipValue.branch];
+      prefillLead(nameIn.value.trim(), null, `Live-Studio: ${b.l}, Stil „${chipValue.style}“, Ort ${townIn.value}. `);
+    });
+  }
+
+  /* ---------- Google-Vorschau ---------- */
+  const serp = $('#seCard');
+  if (serp) {
+    const f = id => $('#' + id);
+    const ctx = document.createElement('canvas').getContext('2d');
+    const LIMIT = { title: 580, desc: 920 };
+    const width = (t, px) => { ctx.font = `${px}px Arial, Helvetica, sans-serif`; return ctx.measureText(t).width; };
+    const fit = (t, px, max) => {
+      if (width(t, px) <= max) return t;
+      let lo = 0, hi = t.length;
+      while (lo < hi) { const m = (lo + hi + 1) >> 1; if (width(t.slice(0, m) + ' …', px) <= max) lo = m; else hi = m - 1; }
+      const cut = t.slice(0, lo); const sp = cut.lastIndexOf(' ');
+      return (sp > lo * 0.6 ? cut.slice(0, sp) : cut).replace(/[\s,–-]+$/, '') + ' …';
+    };
+    const slug = t => t.toLowerCase().replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'dein-betrieb';
+    let dirty = { title: false, desc: false };
+    const suggest = () => {
+      const n = f('seName').value.trim() || 'Dein Betrieb', sv = f('seService').value.trim() || 'Leistung', o = f('seTown').value, u = f('seUsp').value.trim();
+      if (!dirty.title) f('seTitle').value = `${sv} in ${o} – ${n}`;
+      if (!dirty.desc) f('seDesc').value = `${n}: ${sv} in ${o} und Umgebung.${u ? ' ' + u.replace(/\.$/, '') + '.' : ''} Jetzt unverbindlich Termin anfragen.`;
+    };
+    const meter = (key, px, el, lab, text) => {
+      const w = width(text, px), r = w / LIMIT[key];
+      el.style.transform = `scaleX(${Math.min(r, 1)})`;
+      el.className = r > 1 ? 'long' : r < 0.45 ? 'short' : '';
+      lab.textContent = r > 1 ? 'wird abgeschnitten' : r < 0.45 ? 'eher kurz' : 'passt';
+      return r;
+    };
+    const ring = f('seRing'), checks = $$('#seChecks li');
+    const render = () => {
+      const n = f('seName').value.trim() || 'Dein Betrieb', sv = f('seService').value.trim(), o = f('seTown').value;
+      const title = f('seTitle').value.replace(/\s+/g, ' ').trim(), desc = f('seDesc').value.replace(/\s+/g, ' ').trim();
+      f('seSiteName').textContent = n; f('seFav').textContent = (n[0] || 'L').toUpperCase();
+      f('seUrl').textContent = `https://www.${slug(n)}.de › ${slug(sv || 'leistungen')}`;
+      f('sePrevTitle').textContent = fit(title || n, 20, LIMIT.title);
+      f('sePrevDesc').textContent = fit(desc, 14, LIMIT.desc);
+      const tr = meter('title', 20, f('seTitleM'), f('seTitleL'), title), dr = meter('desc', 14, f('seDescM'), f('seDescL'), desc);
+      const low = t => t.toLowerCase();
+      const res = {
+        service: !!sv && low(title).includes(low(sv)),
+        town: low(title).includes(low(o)),
+        tlen: tr <= 1 && tr >= 0.45,
+        dlen: dr <= 1 && dr >= 0.45,
+        cta: /(jetzt|termin|anfrag|anruf|buch|reserv|kontakt|bestell)/i.test(desc)
+      };
+      let score = 0;
+      checks.forEach(li => { const ok = res[li.dataset.k]; li.classList.toggle('ok', ok); if (ok) score++; });
+      f('seScore').textContent = `${score}/5`;
+      ring.style.strokeDashoffset = String(1 - score / 5);
+      ring.style.stroke = score >= 4 ? '' : score >= 2 ? '#b7791f' : '#c53030';
+    };
+    ['seName', 'seService', 'seUsp'].forEach(id => f(id).addEventListener('input', () => { suggest(); render(); }));
+    f('seTown').addEventListener('change', () => { suggest(); render(); });
+    f('seTitle').addEventListener('input', () => { dirty.title = true; render(); });
+    f('seDesc').addEventListener('input', () => { dirty.desc = true; render(); });
+    f('seReset').addEventListener('click', () => { dirty = { title: false, desc: false }; suggest(); render(); });
+    $('[data-chip="device"]').addEventListener('lf:chip', e => { serp.dataset.device = e.detail; });
+    suggest(); render();
+    // Tab-Wechsel: Messung nach dem Einblenden aktualisieren
+    $('#tabB')?.addEventListener('click', () => requestAnimationFrame(render));
+    $('#serpUse').addEventListener('click', () => prefillLead(f('seName').value.trim(), 'Local SEO', `Google-Vorschau: Titel „${f('seTitle').value.trim()}“. Bitte Sichtbarkeit verbessern. `));
+  }
 
   /* ---------- Anfrageformular → Zentrale ---------- */
   $('#leadForm')?.addEventListener('submit', async e => {

@@ -8,6 +8,8 @@ graue Arbeitsfläche, weiße Panels, Status-Badges – mit Animationen und volle
 Den **Inhalt** dieses Ordners in das Hauptverzeichnis des Webspace hochladen und vorhandene Dateien überschreiben.
 
 Neu:
+- `zentrale/` – dein Verwaltungsbereich (Anfragen, Termine, Kunden, Rechnungen, Ausgaben, Steuer)
+- `robots.txt` – zusätzlich `Disallow: /zentrale/`
 - `assets/lf.css` – Designsystem für alle Seiten
 - `assets/lf.js` – Navigation, Scroll-Animationen, Handy-Menü
 - `assets/lf-home.js` – Startseite (Zentrale-Vorschau, Konfigurator, Demo-Vorschau, Anfrage)
@@ -36,3 +38,27 @@ Nach dem Hochladen:
 1. In der Google Search Console die `sitemap.xml` erneut einreichen und die Startseite zur Indexierung anfragen.
 2. Das Google-Unternehmensprofil mit exakt derselben Adresse und Telefonnummer pflegen.
 3. Kunden aktiv um Google-Bewertungen bitten.
+
+## Zentrale einrichten (einmalig, ca. 3 Minuten)
+1. Den Ordner `zentrale/` komplett hochladen – inklusive `zentrale/data/` mit der Datei `.htaccess`.
+   Der Ordner `zentrale/data` muss beschreibbar sein (Strato-Standard, sonst Rechte auf 755 setzen).
+2. **Direkt nach dem Hochladen** https://lokalform.de/zentrale/ öffnen.
+3. „Einrichtungscode senden“ tippen. Der Code kommt an webdesign@lokalform.de.
+   Falls keine E-Mail ankommt: Der Code steht dann im Strato-Dateimanager in `zentrale/data/EINRICHTUNGSCODE.php`.
+4. Code, Benutzername und Passwort (mind. 10 Zeichen) eintragen – fertig.
+
+Danach meldest du dich unter https://lokalform.de/zentrale/ an.
+
+- Neue Anfragen und Terminbuchungen von der Website landen automatisch in der Zentrale
+  (und weiterhin auch in deinem bisherigen System unter `admin.php`, das unverändert bleibt).
+- **Passwort vergessen:** Im Dateimanager `zentrale/data/config.php` löschen und Schritt 2–4 wiederholen.
+  Alle Daten bleiben erhalten.
+- **Sicherung:** Alle Daten liegen in `zentrale/data/store.php`. Die Strato-Datensicherung umfasst diesen Ordner.
+- Vor der ersten Rechnung unter Rechnungen → „Absenderdaten“ deine **Steuernummer** und Bankverbindung eintragen.
+
+## Rechtstexte
+Impressum, Datenschutz, Cookies, AGB und Widerruf sind überarbeitet (Stand 06.10.2026) und beschreiben genau,
+was diese Website tut (keine Tracker, keine externen Schriften, Formulare, Terminbuchung, Zentrale).
+Das ist eine sorgfältige Vorlage, aber keine Rechtsberatung. Für echten Abmahnschutz die Texte einmal von
+einer Anwältin/einem Anwalt oder einem Rechtstexte-Dienst mit Update-Service prüfen lassen.
+Offene Entscheidung: Arbeitest du nur mit Unternehmen (B2B), kann die Widerrufsbelehrung entfallen.

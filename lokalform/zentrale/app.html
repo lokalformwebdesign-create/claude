@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#000000">
+<title>Zentrale · Lokalform</title>
+<link rel="icon" href="../assets/favicon.svg">
+<link rel="stylesheet" href="zentrale.css?v=1">
+</head>
+<body class="z-app">
+<a class="z-skip" href="#zMain">Zum Inhalt</a>
+<aside class="z-side" aria-label="Navigation">
+  <div class="z-side-brand"><svg class="z-seal" viewBox="82 82 916 916" aria-hidden="true"><circle cx="540" cy="540" r="452" fill="none" stroke="currentColor" stroke-width="1.6" vector-effect="non-scaling-stroke"/><g fill="currentColor"><path d="M387 390H439V558H540V605H387Z"/><path d="M545 390H697V433H603V461H690V515H603V605H545Z"/></g><line x1="348" y1="699" x2="732" y2="699" stroke="currentColor" stroke-width="1.6" vector-effect="non-scaling-stroke"/><text x="360" y="766" textLength="362" lengthAdjust="spacing" font-family="Arial,Helvetica,sans-serif" font-size="40" fill="currentColor">LOKALFORM</text></svg><span>Zentrale</span></div>
+  <nav class="z-nav" id="zNav">
+    <i class="z-pill" aria-hidden="true"></i>
+    <a href="#uebersicht" data-view="uebersicht">Übersicht</a>
+    <a href="#anfragen" data-view="anfragen">Anfragen <b class="z-count" data-count="leads"></b></a>
+    <a href="#termine" data-view="termine">Termine <b class="z-count" data-count="appointments"></b></a>
+    <a href="#kunden" data-view="kunden">Kunden</a>
+    <a href="#rechnungen" data-view="rechnungen">Rechnungen <b class="z-count" data-count="invoices"></b></a>
+    <a href="#ausgaben" data-view="ausgaben">Ausgaben</a>
+    <a href="#steuer" data-view="steuer">Steuer</a>
+  </nav>
+  <div class="z-side-foot"><a href="../" target="_blank" rel="noopener">Website öffnen ↗</a><button type="button" data-act="logout">Abmelden</button></div>
+</aside>
+
+<header class="z-top"><svg class="z-seal" viewBox="82 82 916 916" aria-hidden="true"><circle cx="540" cy="540" r="452" fill="none" stroke="currentColor" stroke-width="1.6" vector-effect="non-scaling-stroke"/><g fill="currentColor"><path d="M387 390H439V558H540V605H387Z"/><path d="M545 390H697V433H603V461H690V515H603V605H545Z"/></g></svg><strong id="zTopTitle">Übersicht</strong><button type="button" class="z-icon-btn" data-act="add" aria-label="Neu anlegen" id="zTopAdd">+</button></header>
+
+<main class="z-main" id="zMain" tabindex="-1">
+  <div class="z-demo" id="zDemo" hidden>Demo-Modus: Beispieldaten nur in diesem Browser – nichts wird an den Server gesendet.</div>
+  <div class="z-head"><div><span class="z-kicker" id="zKicker">Lokalform</span><h1 id="zTitle">Übersicht</h1></div><div class="z-head-actions" id="zActions"></div></div>
+  <div id="zView" aria-live="polite"><p class="z-loading">Daten werden geladen …</p></div>
+</main>
+
+<nav class="z-tabbar" aria-label="Navigation (mobil)">
+  <a href="#uebersicht" data-view="uebersicht"><i class="ic ic-home"></i>Übersicht</a>
+  <a href="#anfragen" data-view="anfragen"><i class="ic ic-inbox"></i>Anfragen<b class="z-count" data-count="leads"></b></a>
+  <a href="#termine" data-view="termine"><i class="ic ic-cal"></i>Termine</a>
+  <a href="#rechnungen" data-view="rechnungen"><i class="ic ic-doc"></i>Rechnungen</a>
+  <button type="button" data-act="more" aria-expanded="false" aria-controls="zMore"><i class="ic ic-more"></i>Mehr</button>
+</nav>
+<div class="z-more" id="zMore" hidden>
+  <div class="z-more-card" role="dialog" aria-modal="true" aria-label="Weitere Bereiche">
+    <a href="#kunden" data-view="kunden">Kunden</a><a href="#ausgaben" data-view="ausgaben">Ausgaben</a><a href="#steuer" data-view="steuer">Steuer</a>
+    <a href="../" target="_blank" rel="noopener">Website öffnen ↗</a><button type="button" data-act="logout">Abmelden</button>
+  </div>
+</div>
+
+<div class="z-drawer" id="zDrawer" aria-hidden="true" inert>
+  <div class="z-drawer-scrim" data-act="close"></div>
+  <section class="z-drawer-card" role="dialog" aria-modal="true" aria-labelledby="zDrawerTitle">
+    <header><h2 id="zDrawerTitle">Bearbeiten</h2><button type="button" class="z-icon-btn" data-act="close" aria-label="Schließen">×</button></header>
+    <div class="z-drawer-body" id="zDrawerBody"></div>
+  </section>
+</div>
+<div class="z-confirm" id="zConfirm" hidden><div role="alertdialog" aria-modal="true" aria-labelledby="zConfirmText"><p id="zConfirmText">Wirklich löschen?</p><div><button type="button" class="z-btn ghost" data-confirm="no">Abbrechen</button><button type="button" class="z-btn danger" data-confirm="yes">Löschen</button></div></div></div>
+<div class="z-toast" id="zToast" role="status" aria-live="polite"></div>
+<div id="zPrint" class="z-print" aria-hidden="true"></div>
+<script src="app.js?v=1" defer></script>
+</body>
+</html>
