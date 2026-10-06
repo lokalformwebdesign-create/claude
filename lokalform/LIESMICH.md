@@ -24,6 +24,7 @@ Formular (`/api.php?action=lead`) und Terminbuchung (`/api.php?action=appointmen
 weiterhin dieselben Schnittstellen wie vorher.
 
 ## Hinweise
+- Schnellzugriff: Knopf oben rechts auf jeder Seite (Handy: Raster-Symbol neben dem Menü), alle Seiten nach Kategorien mit Suche. Tastatur: Strg+K bzw. ⌘K oder „/“.
 - Tag-/Nachtansicht: folgt automatisch der Einstellung des Geräts; der Schalter „Nachtansicht“ (Seitenleiste, Handy-Menü, Footer, Zentrale) überschreibt das und merkt sich die Wahl im Browser.
 - Keine externen Schriften oder Bibliotheken: nur Systemschriften, kein Google Fonts (DSGVO).
 - Mit „Bewegung reduzieren“ im Betriebssystem werden die Bewegungen auf ruhige Überblendungen reduziert.

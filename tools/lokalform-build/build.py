@@ -42,6 +42,77 @@ THEME_BTN = ('<button type="button" class="lf-theme" data-theme-toggle role="swi
              'Nachtansicht</span><i aria-hidden="true"></i></button>')
 
 
+QUICK = [
+    ("Start & Studio", [
+        ("index.html", "Startseite", "Überblick", "home start lokalform studio"),
+        ("index.html#arbeiten", "Arbeiten", "Drei Demo-Websites", "projekte demos portfolio beispiele"),
+        ("index.html#labor", "Ausprobieren", "Live-Studio & Google-Vorschau", "testen tool werkzeug vorschau"),
+        ("index.html#prozess", "Ablauf", "In fünf Schritten zur Website", "prozess schritte vorgehen"),
+        ("referenzen.html", "Referenzen", "Konzepte im Detail", "kunden konzepte arbeiten"),
+    ]),
+    ("Leistungen & Preise", [
+        ("website-start.html", "Website Start", "ab 400 €", "einstieg günstig onepage klein"),
+        ("website-business.html", "Website Business", "ab 600 €", "mehrseitig unternehmen leistungen"),
+        ("website-individuell.html", "Individuelles Websystem", "nach Umfang", "system kundenbereich admin funktionen"),
+        ("local-seo.html", "Local SEO", "Bei Google gefunden werden", "google sichtbarkeit suchmaschine ranking"),
+        ("care-20.html", "Care", "Betreuung ab 20 € / Monat", "pflege wartung betreuung abo"),
+        ("growth-40.html", "Growth", "Betreuung + SEO ab 40 € / Monat", "wachstum seo betreuung abo"),
+        ("preise.html", "Alle Preise", "Übersicht & Vergleich", "kosten preis paket vergleich"),
+    ]),
+    ("Branchen & Region", [
+        ("webdesign-luedenscheid.html", "Webdesign Lüdenscheid", "Märkischer Kreis", "lüdenscheid region lokal märkischer kreis"),
+        ("webdesign-handwerker.html", "Für Handwerker", "Leistungen · Vertrauen", "handwerk betrieb dach elektro"),
+        ("webdesign-dienstleister.html", "Für Dienstleister", "Positionierung · Anfrage", "dienstleistung beratung agentur"),
+        ("webdesign-kleine-unternehmen.html", "Für kleine Unternehmen", "Schlank starten", "klein selbstständig gründer"),
+    ]),
+    ("Ratgeber", [
+        ("wissen.html", "Wissen", "Alle Ratgeber", "blog artikel ratgeber"),
+        ("website-erstellen-lassen.html", "Website erstellen lassen", "Von Konzept bis Launch", "erstellen lassen ablauf"),
+        ("webdesign-kosten.html", "Was kostet eine Website?", "Preise verstehen", "kosten preis budget"),
+        ("website-checkliste.html", "Website-Checkliste", "SEO, Technik, Launch", "checkliste prüfen launch"),
+        ("website-relaunch.html", "Website-Relaunch", "Bestehende Seite erneuern", "relaunch neu überarbeiten"),
+    ]),
+    ("Rechtliches", [
+        ("impressum.html", "Impressum", "Anbieter & Kontakt", "anbieter adresse kontakt"),
+        ("datenschutz.html", "Datenschutz", "DSGVO-Hinweise", "dsgvo privacy daten"),
+        ("cookies.html", "Cookies", "Was gespeichert wird", "cookie speicher"),
+        ("agb.html", "AGB", "Vertragsbedingungen", "vertrag bedingungen"),
+        ("widerruf.html", "Widerruf", "Belehrung & Formular", "widerrufsrecht formular"),
+    ]),
+]
+GRID_SVG = ('<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">'
+            '<rect x="3.5" y="3.5" width="7" height="7" rx="1"/><rect x="13.5" y="3.5" width="7" height="7" rx="1"/>'
+            '<rect x="3.5" y="13.5" width="7" height="7" rx="1"/><rect x="13.5" y="13.5" width="7" height="7" rx="1"/></svg>')
+
+
+def quick_panel(page):
+    home = page == "index.html"
+    def href(h):
+        if home and h.startswith("index.html#"):
+            return h[len("index.html"):]
+        if home and h == "index.html":
+            return "#top"
+        return h
+    groups = []
+    for title, items in QUICK:
+        lis = []
+        for h, label, hint, kw in items:
+            cur = ' aria-current="page"' if h == page else ""
+            lis.append(f'<li><a href="{href(h)}" data-k="{label} {hint} {kw}"{cur}><b>{label}</b><span>{hint}</span></a></li>')
+        groups.append(f'<div class="lf-quick-group"><p class="lf-quick-h">{title}</p><ul aria-label="{title}">{"".join(lis)}</ul></div>')
+    termin = ('<button type="button" class="lf-quick-act primary" data-stage="termine.html" data-title="Termin buchen">Termin buchen</button>'
+              if home else '<a class="lf-quick-act primary" href="termine.html">Termin buchen</a>')
+    anfrage = "#anfrage" if home else "index.html#anfrage"
+    return f'''<div class="lf-quick" id="lfQuick" role="dialog" aria-label="Schnellzugriff" inert>
+  <div class="lf-quick-head"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg><input type="search" id="lfQuickQ" placeholder="Wohin möchtest du?" aria-label="Seiten durchsuchen" autocomplete="off" enterkeyhint="go"><button type="button" class="lf-quick-close" aria-label="Schnellzugriff schließen">Esc</button></div>
+  <div class="lf-quick-actions">{termin}<a class="lf-quick-act" href="{anfrage}">Projekt anfragen</a><a class="lf-quick-act" href="tel:+491605959013">Anrufen</a><a class="lf-quick-act" href="mailto:webdesign@lokalform.de">E-Mail</a></div>
+  <nav class="lf-quick-groups" aria-label="Alle Seiten">{"".join(groups)}</nav>
+  <p class="lf-quick-empty" hidden>Nichts gefunden. Schreib uns direkt: <a href="mailto:webdesign@lokalform.de">webdesign@lokalform.de</a></p>
+  <p class="lf-quick-foot" aria-hidden="true"><span><kbd>↑</kbd><kbd>↓</kbd> wählen</span><span><kbd>Enter</kbd> öffnen</span><span><kbd>Strg</kbd>+<kbd>K</kbd> öffnen/schließen</span></p>
+</div>
+'''
+
+
 def nav_links(items, current, prefix=""):
     out = []
     for href, label in items:
@@ -78,9 +149,10 @@ def shell(page):
     <p><a href="mailto:webdesign@lokalform.de">webdesign@lokalform.de</a></p>
   </div>
 </aside>
-<header class="lf-top">
+<button type="button" class="lf-qbtn" aria-expanded="false" aria-controls="lfQuick">{GRID_SVG}<span>Schnellzugriff</span><kbd>Strg K</kbd></button>
+{quick_panel(page)}<header class="lf-top">
   <a class="lf-brand" href="{brand_href}" aria-label="Lokalform – Startseite"><i></i>LOKALFORM</a>
-  <div class="lf-top-actions">{top_cta}<button type="button" class="lf-burger" aria-expanded="false" aria-controls="lfSheet" aria-label="Menü öffnen"><span></span></button></div>
+  <div class="lf-top-actions">{top_cta}<button type="button" class="lf-qbtn-m" aria-expanded="false" aria-controls="lfQuick" aria-label="Schnellzugriff öffnen">{GRID_SVG}</button><button type="button" class="lf-burger" aria-expanded="false" aria-controls="lfSheet" aria-label="Menü öffnen"><span></span></button></div>
 </header>
 <div class="lf-sheet" id="lfSheet">
   {THEME_BTN}

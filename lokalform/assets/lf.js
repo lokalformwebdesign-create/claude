@@ -138,6 +138,73 @@
   /* ---------- Jahr ---------- */
   $$('[data-year],#year').forEach(el => (el.textContent = new Date().getFullYear()));
 
+  /* ---------- Schnellzugriff (oben rechts) ---------- */
+  const quick = $('#lfQuick');
+  if (quick) {
+    const qIn = $('#lfQuickQ'), qBtns = $$('[aria-controls="lfQuick"]'), empty = $('.lf-quick-empty', quick);
+    const links = $$('.lf-quick-group a', quick), groupsQ = $$('.lf-quick-group', quick);
+    const fine = matchMedia('(pointer: fine)');
+    const mobile = matchMedia('(max-width: 1099px)');
+    if (/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) $$('kbd', quick).concat($$('.lf-qbtn kbd')).forEach(k => { if (k.textContent === 'Strg K') k.textContent = '⌘K'; if (k.textContent === 'Strg') k.textContent = '⌘'; });
+    const norm = t => t.toLowerCase().replace(/ä/g, 'ae').replace(/ö/g, 'oe').replace(/ü/g, 'ue').replace(/ß/g, 'ss');
+    let visible = links, sel = -1, qOpener = null;
+    const mark = i => { links.forEach(a => a.classList.remove('is-sel')); sel = i; if (visible[i]) { visible[i].classList.add('is-sel'); visible[i].scrollIntoView({ block: 'nearest' }); } };
+    const filter = q => {
+      const words = norm(q).split(/\s+/).filter(Boolean);
+      links.forEach(a => { const hay = norm(a.dataset.k || a.textContent); a.parentElement.hidden = !words.every(w => hay.includes(w)); });
+      groupsQ.forEach(g => (g.hidden = !$$('li:not([hidden])', g).length));
+      visible = links.filter(a => !a.parentElement.hidden);
+      empty.hidden = visible.length > 0;
+      mark(words.length ? 0 : -1);
+    };
+    const setQuick = (open, viaKey) => {
+      if (open === quick.classList.contains('open')) return;
+      quick.classList.toggle('instant', !!viaKey);
+      quick.classList.toggle('open', open);
+      quick.toggleAttribute('inert', !open);
+      qBtns.forEach(b => b.setAttribute('aria-expanded', String(open)));
+      if (open) {
+        setSheet(false);
+        qOpener = document.activeElement;
+        qIn.value = ''; filter('');
+        if (mobile.matches) document.body.classList.add('lf-lock');
+        if (fine.matches || viaKey) setTimeout(() => qIn.focus({ preventScroll: true }), viaKey ? 0 : 40);
+        else quick.focus?.({ preventScroll: true });
+      } else {
+        document.body.classList.remove('lf-lock');
+        if (qOpener && document.contains(qOpener)) qOpener.focus({ preventScroll: true });
+      }
+    };
+    quick.tabIndex = -1;
+    qBtns.forEach(b => b.addEventListener('click', e => { e.stopPropagation(); setQuick(!quick.classList.contains('open')); }));
+    $('.lf-quick-close', quick).addEventListener('click', () => setQuick(false));
+    qIn.addEventListener('input', () => filter(qIn.value));
+    quick.addEventListener('click', e => { if (e.target.closest('a,[data-stage]')) setQuick(false); });
+    quick.addEventListener('keydown', e => {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (!visible.length) return;
+        const n = e.key === 'ArrowDown' ? (sel + 1) % visible.length : (sel - 1 + visible.length) % visible.length;
+        mark(n); visible[n].focus({ preventScroll: true });
+      } else if (e.key === 'Enter' && e.target === qIn && visible[Math.max(sel, 0)]) {
+        e.preventDefault(); visible[Math.max(sel, 0)].click();
+      } else if (e.key === 'Tab') {
+        const f = $$('input,button,a', quick).filter(x => !x.closest('[hidden]'));
+        if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
+        else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
+      }
+    });
+    document.addEventListener('click', e => { if (quick.classList.contains('open') && !quick.contains(e.target)) setQuick(false); });
+    addEventListener('keydown', e => {
+      const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName) || document.activeElement?.isContentEditable;
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); setQuick(!quick.classList.contains('open'), true); }
+      else if (e.key === '/' && !typing && !quick.classList.contains('open')) { e.preventDefault(); setQuick(true, true); }
+      else if (e.key === 'Escape' && quick.classList.contains('open')) { e.stopPropagation(); setQuick(false); }
+    }, true);
+    burger?.addEventListener('click', () => setQuick(false));
+    mobile.addEventListener?.('change', () => setQuick(false));
+  }
+
   /* ---------- Tag / Nacht ---------- */
   const KEY = 'lf-theme', dark = matchMedia('(prefers-color-scheme: dark)');
   const effective = () => root.dataset.theme || (dark.matches ? 'dark' : 'light');

@@ -1027,3 +1027,53 @@ html.js .lf-wordmark[data-r].in>span{transform:none;transition:transform 1.1s va
 .lf-theming,.lf-theming *,.lf-theming *::before,.lf-theming *::after{transition:none!important}
 ::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
 @media (prefers-reduced-motion:reduce){.lf-theme i,.lf-theme i::after{transition:none}}
+
+/* ==========================================================================
+   Schnellzugriff (oben rechts, jede Seite)
+   ========================================================================== */
+.lf-qbtn{position:fixed;top:16px;right:clamp(16px,2vw,28px);z-index:130;display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 10px 0 14px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--ink);font:600 13px var(--sans);box-shadow:0 8px 24px var(--shadow);transition:border-color .2s ease,transform .14s var(--ease-out);touch-action:manipulation}
+.lf-qbtn:active{transform:scale(.97)}
+.lf-qbtn kbd,.lf-quick kbd{font:600 10px/1 var(--sans);letter-spacing:.04em;padding:4px 6px;border:1px solid var(--line);border-radius:4px;color:var(--muted);background:var(--tint)}
+@media (hover:hover) and (pointer:fine){.lf-qbtn:hover{border-color:var(--ink)}}
+.lf-qbtn[aria-expanded="true"]{border-color:var(--ink)}
+.lf-qbtn-m{display:none}
+.lf-quick{position:fixed;z-index:135;top:68px;right:clamp(16px,2vw,28px);width:min(620px,calc(100vw - var(--side-w) - 48px));max-height:calc(100vh - 92px);max-height:calc(100dvh - 92px);overflow-y:auto;overscroll-behavior:contain;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:12px;box-shadow:0 24px 70px var(--shadow);
+  transform-origin:top right;opacity:0;transform:translateY(-6px) scale(.98);visibility:hidden;transition:opacity .14s ease,transform .16s var(--ease-out),visibility 0s linear .16s}
+.lf-quick.open{opacity:1;transform:none;visibility:visible;transition:opacity .16s ease,transform .2s var(--ease-out),visibility 0s}
+.lf-quick.instant{transition:none}
+.lf-quick-head{position:sticky;top:0;z-index:1;display:flex;align-items:center;gap:10px;padding:10px 12px 10px 16px;background:var(--panel);border-bottom:1px solid var(--line)}
+.lf-quick-head svg{flex:none;color:var(--muted)}
+.lf-quick-head input{flex:1;min-width:0;min-height:44px;border:0;background:none;color:var(--ink);font:16px var(--sans);outline:0;-webkit-appearance:none;appearance:none}
+.lf-quick-head input::-webkit-search-cancel-button{display:none}
+.lf-quick-close{flex:none;min-height:36px;padding:0 10px;border:1px solid var(--line);border-radius:6px;background:var(--tint);color:var(--muted);font:600 11px var(--sans)}
+.lf-quick-actions{display:flex;flex-wrap:wrap;gap:8px;padding:14px 16px;border-bottom:1px solid var(--line-soft)}
+.lf-quick-act{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--ink);font:600 13px var(--sans);transition:border-color .2s ease,background-color .2s ease}
+.lf-quick-act.primary{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+@media (hover:hover) and (pointer:fine){.lf-quick-act:not(.primary):hover{border-color:var(--ink)}}
+.lf-quick-groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 20px;padding:10px 16px 16px}
+.lf-quick-group{min-width:0;padding-top:8px}
+.lf-quick-h{margin:0 0 4px;padding:0 8px;font:600 10px/1.6 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.lf-quick-group ul{list-style:none;margin:0;padding:0}
+.lf-quick-group a{display:flex;flex-direction:column;gap:1px;padding:8px;border-radius:8px;outline-offset:-2px;transition:background-color .15s ease}
+.lf-quick-group a b{font:500 15px/1.3 var(--sans)}
+.lf-quick-group a span{font-size:12px;color:var(--muted)}
+.lf-quick-group a[aria-current="page"] b::after{content:" · hier";font-weight:400;color:var(--muted)}
+.lf-quick-group a:focus-visible,.lf-quick-group a.is-sel{background:var(--tint)}
+@media (hover:hover) and (pointer:fine){.lf-quick-group a:hover{background:var(--tint)}}
+.lf-quick-group [hidden],.lf-quick-group[hidden]{display:none!important}
+.lf-quick-empty{margin:0;padding:20px 16px;color:var(--muted);font-size:14px}
+.lf-quick-empty a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.lf-quick-foot{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0;padding:10px 16px;border-top:1px solid var(--line-soft);font-size:11px;color:var(--muted)}
+.lf-quick-foot kbd{margin-right:3px}
+html.in-frame .lf-qbtn,html.in-frame .lf-quick{display:none}
+@media (max-width:1099px){
+  .lf-qbtn{display:none}
+  .lf-qbtn-m{display:grid;place-items:center;width:44px;height:44px;border-radius:8px;border:1px solid #3a3a3a;background:transparent;color:#fff;padding:0;touch-action:manipulation}
+  .lf-qbtn-m[aria-expanded="true"]{background:#fff;color:#000;border-color:#fff}
+  .lf-quick{top:calc(var(--top-h) + env(safe-area-inset-top) + 8px);left:8px;right:8px;width:auto;max-height:calc(100dvh - var(--top-h) - env(safe-area-inset-top) - 16px)}
+  .lf-quick-groups{grid-template-columns:minmax(0,1fr)}
+  .lf-quick-group a{min-height:48px;justify-content:center}
+  .lf-quick-foot{display:none}
+}
+@media (max-width:380px){.lf-top .lf-top-actions>.lf-btn{display:none}}
+@media (prefers-reduced-motion:reduce){.lf-quick,.lf-quick.open{transition:visibility 0s,opacity .1s ease;transform:none}}
