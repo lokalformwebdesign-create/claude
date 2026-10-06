@@ -12,7 +12,9 @@ HERE = pathlib.Path(__file__).parent
 HEAD_EXTRA = (
     '<meta name="theme-color" content="#000000">\n'
     '<meta property="og:locale" content="de_DE">\n'
-    '<link rel="stylesheet" href="assets/lf.css?v=2">\n'
+    '<link rel="preload" href="assets/fonts/bodoni-moda.woff2" as="font" type="font/woff2" crossorigin>\n'
+    '<link rel="preload" href="assets/fonts/hanken-grotesk.woff2" as="font" type="font/woff2" crossorigin>\n'
+    '<link rel="stylesheet" href="assets/lf.css?v=3">\n'
     '<script>document.documentElement.classList.add("js");'
     'try{if(window.self!==window.top)document.documentElement.classList.add("in-frame")}catch(e){document.documentElement.classList.add("in-frame")}</script>\n'
 )

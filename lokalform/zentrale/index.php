@@ -104,7 +104,7 @@ $isSetup = $config === null;
 <meta name="theme-color" content="#000000">
 <title><?= $isSetup ? 'Zentrale einrichten' : 'Anmelden' ?> · Lokalform</title>
 <link rel="icon" href="../assets/favicon.svg">
-<link rel="stylesheet" href="zentrale.css?v=1">
+<link rel="stylesheet" href="zentrale.css?v=2">
 </head>
 <body class="z-auth">
 <main class="z-auth-card">

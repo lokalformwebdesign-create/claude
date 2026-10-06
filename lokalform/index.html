@@ -13,7 +13,9 @@
 
 <meta name="theme-color" content="#000000">
 <meta property="og:locale" content="de_DE">
-<link rel="stylesheet" href="assets/lf.css?v=2">
+<link rel="preload" href="assets/fonts/bodoni-moda.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/hanken-grotesk.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/lf.css?v=3">
 <script>document.documentElement.classList.add("js");try{if(window.self!==window.top)document.documentElement.classList.add("in-frame")}catch(e){document.documentElement.classList.add("in-frame")}</script>
 </head>
 <body class="lf-home">
@@ -180,16 +182,16 @@
         <form class="lf-lab-form" id="studioForm">
           <label class="lf-field full">Firmenname<input id="stName" maxlength="40" value="Holzwerk Brügge" autocomplete="off"></label>
           <div class="lf-q"><span id="branchL">Branche</span><div class="lf-chips" role="radiogroup" aria-labelledby="branchL" data-chip="branch"><button type="button" role="radio" aria-checked="true" class="active" data-value="handwerk">Handwerk</button><button type="button" role="radio" aria-checked="false" class="" data-value="cafe">Café</button><button type="button" role="radio" aria-checked="false" class="" data-value="salon">Salon</button><button type="button" role="radio" aria-checked="false" class="" data-value="praxis">Praxis</button></div></div>
-          <div class="lf-q"><span id="styleL">Stil</span><div class="lf-chips" role="radiogroup" aria-labelledby="styleL" data-chip="style"><button type="button" role="radio" aria-checked="true" class="active" data-value="klar">Klar</button><button type="button" role="radio" aria-checked="false" class="" data-value="warm">Warm</button><button type="button" role="radio" aria-checked="false" class="" data-value="mutig">Mutig</button></div></div>
+          <div class="lf-q"><span id="styleL">Charakter</span><div class="lf-chips" role="radiogroup" aria-labelledby="styleL" data-chip="style"><button type="button" role="radio" aria-checked="true" class="active" data-value="klassisch">Klassisch</button><button type="button" role="radio" aria-checked="false" class="" data-value="modern">Modern</button><button type="button" role="radio" aria-checked="false" class="" data-value="markant">Markant</button></div></div>
           <label class="lf-field full" style="margin-top:18px">Ort<select id="stTown"><option selected>Lüdenscheid</option><option>Altena</option><option>Balve</option><option>Halver</option><option>Hemer</option><option>Herscheid</option><option>Iserlohn</option><option>Kierspe</option><option>Meinerzhagen</option><option>Menden</option><option>Nachrodt-Wiblingwerde</option><option>Neuenrade</option><option>Plettenberg</option><option>Schalksmühle</option><option>Werdohl</option></select></label>
           <button type="button" class="lf-btn dark" id="studioUse" style="margin-top:22px">Diese Richtung anfragen <span class="ar" aria-hidden="true">↗</span></button>
         </form>
         <div class="lf-phone-stage">
           <div class="lf-phone" aria-label="Live-Vorschau der Beispiel-Website" role="img">
-            <div class="ph-screen"><div class="ph-site" id="phSite" data-style="klar" data-branch="handwerk">
-              <div class="ph-nav"><b class="ph-logo" id="phLogo">HB</b><span class="ph-name" id="phName">Holzwerk Brügge</span><i class="ph-burger"></i></div>
-              <div class="ph-hero"><small id="phKicker">Handwerk · Lüdenscheid</small><h5 id="phHead">Handwerk aus Lüdenscheid, das hält.</h5><p id="phSub">Reparatur, Umbau und Wartung – mit festen Ansprechpartnern.</p><span class="ph-cta" id="phCta">Angebot anfragen</span></div>
-              <div class="ph-cards" id="phCards"><div><i></i><b>Reparatur</b></div><div><i></i><b>Umbau</b></div><div><i></i><b>Notdienst</b></div></div>
+            <div class="ph-screen"><div class="ph-site" id="phSite" data-style="klassisch" data-branch="handwerk">
+              <div class="ph-nav"><b class="ph-mark" id="phLogo">HB</b><span class="ph-name" id="phName">Holzwerk Brügge</span><i class="ph-burger"></i></div>
+              <div class="ph-hero"><div class="ph-visual" id="phIcon"></div><small id="phKicker">Handwerk · Lüdenscheid</small><p class="ph-h" id="phHead">Handwerk aus Lüdenscheid, das hält.</p><p id="phSub">Reparatur, Umbau und Wartung – mit festen Ansprechpartnern.</p><span class="ph-cta" id="phCta">Angebot anfragen</span></div>
+              <div class="ph-cards" id="phCards"><div><b>Reparatur</b><i>→</i></div><div><b>Umbau</b><i>→</i></div><div><b>Notdienst</b><i>→</i></div></div>
               <div class="ph-info"><b>Gut zu wissen</b><span id="phInfo1">Mo–Fr 7–17 Uhr</span><span id="phInfo2">Einsatz im Märkischen Kreis</span></div>
               <div class="ph-bar"><span>Anrufen</span><em id="phBar">Angebot anfragen</em></div>
             </div></div>
@@ -312,8 +314,8 @@
       <article class="lf-price"><span class="lf-badge">System</span><h3>Individuell</h3><div class="amt">nach Umfang</div><p>Besondere Funktionen, Schnittstellen, Adminbereiche oder individuelle Prozesse.</p><a class="lf-btn" href="website-individuell.html">Details</a></article>
     </div>
     <div class="lf-plans" data-r-group="90">
-      <article class="lf-plan"><div><span class="lf-kicker">Betreuung</span><h3 class="lf-h2" style="font-size:34px;margin:14px 0 8px">Care</h3><div class="amt" style="font-size:34px;font-weight:900;letter-spacing:-.05em">20 € <small style="font-size:13px;font-weight:400;color:var(--muted);letter-spacing:0">/ Monat</small></div><a class="lf-btn" href="care-20.html">Care ansehen</a></div><ul><li>Kleine Inhaltsänderungen</li><li>Technischer Basischeck</li><li>Pflege zentraler Inhalte</li><li>Direkter Ansprechpartner</li></ul></article>
-      <article class="lf-plan"><div><span class="lf-kicker">Betreuung + Sichtbarkeit</span><h3 class="lf-h2" style="font-size:34px;margin:14px 0 8px">Growth</h3><div class="amt" style="font-size:34px;font-weight:900;letter-spacing:-.05em">40 € <small style="font-size:13px;font-weight:400;color:var(--muted);letter-spacing:0">/ Monat</small></div><a class="lf-btn" href="growth-40.html">Growth ansehen</a></div><ul><li>Alles aus Care</li><li>Priorisierte Änderungen</li><li>Local-SEO-Check</li><li>Monatliche Content-/Sichtbarkeitshinweise</li></ul></article>
+      <article class="lf-plan"><div><span class="lf-kicker">Betreuung</span><h3 class="lf-h2" style="font-size:34px;margin:14px 0 8px">Care</h3><div class="amt">20 € <small>/ Monat</small></div><a class="lf-btn" href="care-20.html">Care ansehen</a></div><ul><li>Kleine Inhaltsänderungen</li><li>Technischer Basischeck</li><li>Pflege zentraler Inhalte</li><li>Direkter Ansprechpartner</li></ul></article>
+      <article class="lf-plan"><div><span class="lf-kicker">Betreuung + Sichtbarkeit</span><h3 class="lf-h2" style="font-size:34px;margin:14px 0 8px">Growth</h3><div class="amt">40 € <small>/ Monat</small></div><a class="lf-btn" href="growth-40.html">Growth ansehen</a></div><ul><li>Alles aus Care</li><li>Priorisierte Änderungen</li><li>Local-SEO-Check</li><li>Monatliche Content-/Sichtbarkeitshinweise</li></ul></article>
     </div>
   </div>
 </section>
@@ -339,7 +341,7 @@
       <div class="lf-gauges" id="lfGauges" data-io>
         <div class="lf-gauges-head"><span>Lighthouse-Test dieser Website</span><span>Mobil · Okt. 2026</span></div>
         <div class="lf-gauge-row">
-          <div class="lf-gauge" data-v="94"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="27" class="bg"/><circle cx="32" cy="32" r="27" class="fg"/></svg><b data-count="94">94</b><span>Performance</span></div><div class="lf-gauge" data-v="100"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="27" class="bg"/><circle cx="32" cy="32" r="27" class="fg"/></svg><b data-count="100">100</b><span>Barrierefreiheit</span></div><div class="lf-gauge" data-v="96"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="27" class="bg"/><circle cx="32" cy="32" r="27" class="fg"/></svg><b data-count="96">96</b><span>Best Practices</span></div><div class="lf-gauge" data-v="100"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="27" class="bg"/><circle cx="32" cy="32" r="27" class="fg"/></svg><b data-count="100">100</b><span>SEO</span></div>
+          <div class="lf-gauge" data-v="93"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="27" class="bg"/><circle cx="32" cy="32" r="27" class="fg"/></svg><b data-count="93">93</b><span>Performance</span></div><div class="lf-gauge" data-v="100"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="27" class="bg"/><circle cx="32" cy="32" r="27" class="fg"/></svg><b data-count="100">100</b><span>Barrierefreiheit</span></div><div class="lf-gauge" data-v="96"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="27" class="bg"/><circle cx="32" cy="32" r="27" class="fg"/></svg><b data-count="96">96</b><span>Best Practices</span></div><div class="lf-gauge" data-v="100"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="27" class="bg"/><circle cx="32" cy="32" r="27" class="fg"/></svg><b data-count="100">100</b><span>SEO</span></div>
         </div>
       </div>
     </div>

@@ -287,12 +287,19 @@
   $$('#studioForm,#serpForm').forEach(f => f.addEventListener('submit', e => e.preventDefault()));
 
   /* ---------- Live-Studio ---------- */
+  const ICON = {
+    handwerk: '<path d="M12.5 3.5h8v5h-8z"/><path d="M14.5 8.5 5.6 19.6a1.8 1.8 0 0 1-2.7-2.3l8.8-9"/>',
+    cafe: '<path d="M4 9h12v4.5a5.5 5.5 0 0 1-5.5 5.5h-1A5.5 5.5 0 0 1 4 13.5z"/><path d="M16 10.5h1.6a2.6 2.6 0 0 1 0 5.2H16"/><path d="M8 3.2c-1 1.2 1 2.1 0 3.6M12 3.2c-1 1.2 1 2.1 0 3.6"/>',
+    salon: '<circle cx="6" cy="6.5" r="2.8"/><circle cx="6" cy="17.5" r="2.8"/><path d="M8.4 8 20 18.5M8.4 16 20 5.5"/>',
+    praxis: '<path d="M9.5 3.5h5v6h6v5h-6v6h-5v-6h-6v-5h6z"/>'
+  };
   const BR = {
     handwerk: { l: 'Handwerk', h: o => `Handwerk aus ${o}, das hält.`, s: 'Reparatur, Umbau und Wartung – mit festen Ansprechpartnern.', c: 'Angebot anfragen', v: ['Reparatur', 'Umbau', 'Notdienst'], i: ['Mo–Fr 7–17 Uhr', 'Einsatz im Märkischen Kreis'] },
     cafe: { l: 'Café', h: o => `Frisch geröstet in ${o}.`, s: 'Frühstück, hausgemachter Kuchen und richtig guter Kaffee.', c: 'Tisch reservieren', v: ['Frühstück', 'Kuchen', 'Catering'], i: ['Di–So 8–18 Uhr', 'Plätze drinnen und draußen'] },
     salon: { l: 'Salon', h: o => `Dein Termin in ${o}.`, s: 'Schnitt, Farbe und Pflege – rund um die Uhr online buchbar.', c: 'Termin buchen', v: ['Schnitt', 'Farbe', 'Pflege'], i: ['Di–Sa 9–19 Uhr', 'Online-Buchung jederzeit'] },
     praxis: { l: 'Praxis', h: o => `Gut versorgt in ${o}.`, s: 'Termine online, kurze Wege und klare Informationen.', c: 'Termin vereinbaren', v: ['Sprechzeiten', 'Leistungen', 'Team'], i: ['Mo–Fr 8–12 Uhr', 'Rezepte online bestellen'] }
   };
+  const STYLE_L = { klassisch: 'Klassisch', modern: 'Modern', markant: 'Markant' };
   const site = $('#phSite');
   if (site) {
     const nameIn = $('#stName'), townIn = $('#stTown');
@@ -300,6 +307,7 @@
     const paint = () => {
       const b = BR[chipValue.branch], name = nameIn.value.trim() || 'Dein Betrieb', o = townIn.value;
       site.dataset.branch = chipValue.branch; site.dataset.style = chipValue.style;
+      $('#phIcon').innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[chipValue.branch]}</svg>`;
       $('#phName').textContent = name; $('#phLogo').textContent = initials(name);
       $('#phKicker').textContent = `${b.l} · ${o}`; $('#phHead').textContent = b.h(o); $('#phSub').textContent = b.s;
       $('#phCta').textContent = b.c; $('#phBar').textContent = b.c;
@@ -317,7 +325,7 @@
     paint();
     $('#studioUse').addEventListener('click', () => {
       const b = BR[chipValue.branch];
-      prefillLead(nameIn.value.trim(), null, `Live-Studio: ${b.l}, Stil „${chipValue.style}“, Ort ${townIn.value}. `);
+      prefillLead(nameIn.value.trim(), null, `Live-Studio: ${b.l}, Charakter „${STYLE_L[chipValue.style]}“, Ort ${townIn.value}. `);
     });
   }
 
@@ -370,7 +378,7 @@
       checks.forEach(li => { const ok = res[li.dataset.k]; li.classList.toggle('ok', ok); if (ok) score++; });
       f('seScore').textContent = `${score}/5`;
       ring.style.strokeDashoffset = String(1 - score / 5);
-      ring.style.stroke = score >= 4 ? '' : score >= 2 ? '#b7791f' : '#c53030';
+      ring.style.stroke = score >= 4 ? '' : score >= 2 ? '#8a8a8a' : '#c4c4c4';
     };
     ['seName', 'seService', 'seUsp'].forEach(id => f(id).addEventListener('input', () => { suggest(); render(); }));
     f('seTown').addEventListener('change', () => { suggest(); render(); });

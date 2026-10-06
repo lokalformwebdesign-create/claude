@@ -1,7 +1,7 @@
 # Lokalform – Redesign „Zentrale“
 
-Neue Gestaltung von lokalform.de im Stil des Adminbereichs: schwarze Seitenleiste,
-graue Arbeitsfläche, weiße Panels, Status-Badges – mit Animationen und voller Handy-Bedienung.
+Neue Gestaltung von lokalform.de in edlem Schwarz-Weiß: weiße Flächen, tiefes Schwarz, Haarlinien,
+Bodoni Moda für Überschriften – mit Animationen und voller Handy-Bedienung.
 
 ## Hochladen (Strato)
 
@@ -10,7 +10,8 @@ Den **Inhalt** dieses Ordners in das Hauptverzeichnis des Webspace hochladen und
 Neu:
 - `zentrale/` – dein Verwaltungsbereich (Anfragen, Termine, Kunden, Rechnungen, Ausgaben, Steuer)
 - `robots.txt` – zusätzlich `Disallow: /zentrale/`
-- `assets/lf.css` – Designsystem für alle Seiten
+- `assets/fonts/` – Schriften Bodoni Moda und Hanken Grotesk (selbst gehostet, OFL-Lizenz, kein Google-Server)
+- `assets/lf.css` – Designsystem für alle Seiten (Schwarz-Weiß)
 - `assets/lf.js` – Navigation, Scroll-Animationen, Handy-Menü
 - `assets/lf-home.js` – Startseite (Zentrale-Vorschau, Konfigurator, Demo-Vorschau, Anfrage)
 
@@ -32,7 +33,7 @@ weiterhin dieselben Schnittstellen wie vorher.
   Angeboten mit Preisen und FAQ (schema.org `ProfessionalService`, `OfferCatalog`, `FAQPage`).
 - Jede Seite: Name, Adresse und Telefon im Footer, identisch mit dem Impressum. Das ist wichtig für Local SEO.
 - `og:locale` auf allen Seiten, korrekte Überschriften-Reihenfolge, neue Region-Sektion mit internen Links.
-- Lighthouse (Mobil, lokal gemessen): Performance 94, Barrierefreiheit 100, Best Practices 96, SEO 100.
+- Lighthouse (Mobil, lokal gemessen): Performance 93–96, Barrierefreiheit 100, Best Practices 96, SEO 100.
 
 Nach dem Hochladen:
 1. In der Google Search Console die `sitemap.xml` erneut einreichen und die Startseite zur Indexierung anfragen.
